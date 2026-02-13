@@ -1,0 +1,156 @@
+# Moves a blind to a target position by running the motor for a calculated duration.
+# Position is tracked by the Comexio AWL script (marker), not by HA.
+# Parameters:
+#   position_sensor: sensor reading current position from Comexio (e.g. sensor.aussenjalousie_position)
+#   target_position: desired position 0-100 (0=closed, 100=open)
+#   ext:             Comexio extension name (e.g. Universal-Aktor)
+#   io_up:           output for up direction (e.g. Q5)
+#   io_down:         output for down direction (e.g. Q6)
+#   travel_time:     full travel time in seconds (e.g. 38)
+comexio_set_blind_position:
+  alias: "Comexio: Set Blind Position"
+  mode: restart
+  fields:
+    position_sensor:
+      description: sensor entity reading position from Comexio
+    target_position:
+      description: target position 0-100
+    ext:
+      description: Comexio extension name
+    io_up:
+      description: output name for up
+    io_down:
+      description: output name for down
+    travel_time:
+      description: full travel time in seconds
+  sequence:
+    # Stop any current movement first
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_up }}"
+        value: 0
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_down }}"
+        value: 0
+    - delay:
+        milliseconds: 500
+
+    # Calculate direction and duration
+    - variables:
+        current: "{{ states(position_sensor) | float(0) }}"
+        target: "{{ target_position | float(0) }}"
+        diff: "{{ target - current }}"
+        run_seconds: "{{ ((diff | abs) / 100 * travel_time | float(38)) | round(1) }}"
+        io_active: "{{ io_up if diff > 0 else io_down }}"
+
+    # Only move if there's actually a difference
+    - condition: template
+      value_template: "{{ (diff | abs) > 1 }}"
+
+    # Start motor
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_active }}"
+        value: 1
+
+    # Wait for calculated duration
+    - delay:
+        seconds: "{{ run_seconds | int }}"
+        milliseconds: "{{ ((run_seconds | float % 1) * 1000) | int }}"
+
+    # Stop motor
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_active }}"
+        value: 0
+
+# Tilts blind lamellas to a target angle by pulsing the motor briefly.
+# Parameters:
+#   tilt_entity:   input_number tracking current tilt (e.g. input_number.aussenjalousie_tilt)
+#   target_tilt:   desired tilt 0-100 (0=closed, 100=open)
+#   ext:           Comexio extension name
+#   io_up:         output for tilt open direction
+#   io_down:       output for tilt close direction
+#   tilt_time:     full tilt travel time in seconds (e.g. 2)
+comexio_set_blind_tilt:
+  alias: "Comexio: Set Blind Tilt"
+  mode: restart
+  fields:
+    tilt_entity:
+      description: input_number entity tracking tilt
+    target_tilt:
+      description: target tilt 0-100
+    ext:
+      description: Comexio extension name
+    io_up:
+      description: output name for tilt open
+    io_down:
+      description: output name for tilt close
+    tilt_time:
+      description: full tilt travel time in seconds
+  sequence:
+    # Stop any current movement first
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_up }}"
+        value: 0
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_down }}"
+        value: 0
+
+    # Set tilt flag (M11=1) so AWL skips position tracking
+    - action: rest_command.comexio_set_marker
+      data:
+        marker: M11
+        value: 1
+    - delay:
+        milliseconds: 500
+
+    # Calculate direction and pulse duration
+    - variables:
+        current: "{{ states(tilt_entity) | float(50) }}"
+        target: "{{ target_tilt | float(50) }}"
+        diff: "{{ target - current }}"
+        pulse_ms: "{{ ((diff | abs) / 100 * tilt_time | float(2) * 1000) | int }}"
+        io_active: "{{ io_up if diff > 0 else io_down }}"
+
+    # Only move if there's a meaningful difference
+    - condition: template
+      value_template: "{{ (diff | abs) > 2 }}"
+
+    # Pulse motor
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_active }}"
+        value: 1
+    - delay:
+        milliseconds: "{{ pulse_ms }}"
+    - action: rest_command.comexio_set_io
+      data:
+        ext: "{{ ext }}"
+        io: "{{ io_active }}"
+        value: 0
+    - delay:
+        milliseconds: 500
+
+    # Clear tilt flag (M11=0) so AWL resumes position tracking
+    - action: rest_command.comexio_set_marker
+      data:
+        marker: M11
+        value: 0
+
+    # Update stored tilt
+    - action: input_number.set_value
+      target:
+        entity_id: "{{ tilt_entity }}"
+      data:
+        value: "{{ target }}"

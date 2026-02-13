@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "minor_version": 12,
+  "key": "core.device_registry",
+  "data": {
+    "devices": [
+      {"area_id":null,"config_entries":["01KGQ3QR92ZXN1FTV20GE83Z22"],"config_entries_subentries":{"01KGQ3QR92ZXN1FTV20GE83Z22":[null]},"configuration_url":null,"connections":[],"created_at":"2026-02-05T14:36:42.147352+00:00","disabled_by":null,"entry_type":"service","hw_version":null,"id":"aa08554f2a1d8f7887d78a11ab98bbb1","identifiers":[["sun","01KGQ3QR92ZXN1FTV20GE83Z22"]],"labels":[],"manufacturer":null,"model":null,"model_id":null,"modified_at":"2026-02-05T14:36:42.147380+00:00","name_by_user":null,"name":"Sun","primary_config_entry":"01KGQ3QR92ZXN1FTV20GE83Z22","serial_number":null,"sw_version":null,"via_device_id":null},
+      {"area_id":null,"config_entries":["01KGQ3QRX70TK24WDD8CG941ZS"],"config_entries_subentries":{"01KGQ3QRX70TK24WDD8CG941ZS":[null]},"configuration_url":null,"connections":[["bluetooth","64:BC:58:11:4E:FE"]],"created_at":"2026-02-05T14:36:42.792890+00:00","disabled_by":null,"entry_type":null,"hw_version":"usb:v1D6Bp0246d0540","id":"f4d1826ef2365527f48226e2774c6d60","identifiers":[],"labels":[],"manufacturer":"Intel Corporate","model":"0026 (8087:0026)","model_id":null,"modified_at":"2026-02-05T14:36:42.792920+00:00","name_by_user":null,"name":"hci0 (64:BC:58:11:4E:FE)","primary_config_entry":"01KGQ3QRX70TK24WDD8CG941ZS","serial_number":null,"sw_version":"herbert-XPS","via_device_id":null},
+      {"area_id":null,"config_entries":["01KGQ3QRXDQ47187NYNFVS5HQZ"],"config_entries_subentries":{"01KGQ3QRXDQ47187NYNFVS5HQZ":[null]},"configuration_url":"homeassistant://config/backup","connections":[],"created_at":"2026-02-05T14:36:42.812187+00:00","disabled_by":null,"entry_type":"service","hw_version":null,"id":"30cddebd1fcabf96fb327449f09e437f","identifiers":[["backup","backup_manager"]],"labels":[],"manufacturer":"Home Assistant","model":"Home Assistant Backup","model_id":null,"modified_at":"2026-02-05T14:36:42.812217+00:00","name_by_user":null,"name":"Backup","primary_config_entry":"01KGQ3QRXDQ47187NYNFVS5HQZ","serial_number":null,"sw_version":"2026.2.0","via_device_id":null},
+      {"area_id":null,"config_entries":["01KGQ3SB8GSM8H56EW1ZGTHT4F"],"config_entries_subentries":{"01KGQ3SB8GSM8H56EW1ZGTHT4F":[null]},"configuration_url":"https://www.met.no/en","connections":[],"created_at":"2026-02-05T14:37:34.802382+00:00","disabled_by":null,"entry_type":"service","hw_version":null,"id":"cb7c7fe6453cdf1fdeb42125d5c5c1e6","identifiers":[["met","01KGQ3SB8GSM8H56EW1ZGTHT4F"]],"labels":[],"manufacturer":"Met.no","model":"Forecast","model_id":null,"modified_at":"2026-02-05T14:37:34.802408+00:00","name_by_user":null,"name":"Forecast","primary_config_entry":"01KGQ3SB8GSM8H56EW1ZGTHT4F","serial_number":null,"sw_version":null,"via_device_id":null}
+    ],
+    "deleted_devices": []
+  }
+}

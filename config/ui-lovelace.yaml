@@ -1,0 +1,19 @@
+title: Home
+views:
+  - title: Steuerung
+    path: steuerung
+    cards:
+      - type: tile
+        entity: cover.aussenjalousie
+        name: Aussenjalousie
+        icon: mdi:window-shutter
+        state_content:
+          - state
+          - position
+        features:
+          - type: cover-open-close
+          - type: cover-position
+          - type: cover-tilt-position
+      - type: entity
+        entity: sensor.aussenjalousie_position
+        name: Jalousie Position (M10)
