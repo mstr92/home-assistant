@@ -1,71 +1,76 @@
+-- ====================== Info ==========================
+
+-- Position: Raffstore Wohnzimmer West,
+-- Dauer: 38 Sekunden
+
+-- M13 = Istposition Behang (0–100)
+-- M14 = Istposition Lamelle (0–100)
+
+-- M15 = Sollposition Behang
+-- M16 = Sollposition Lamelle
+
+-- M17 = Fahrtrichtung (1 = hoch, -1 = runter, 0 = stop)
+-- M18 = Modus (0 = Behang, 1 = Lamelle)
+
+-- M19 = Hilfsmerker für Flankenerkennung von T5
+-- T5  = Takt 100ms
+
+-- Behang Schritt = 100 / (38 / 0.1) * 2 = 0.526
+-- Lamellen Schritt = 100 / (1.4 / 0.1) * 2 = 14.28
+-- ======================================================
+
+
 -- Takt läuft permanent
 T5 = 1
 
--- ====== FAHRTRICHTUNG ERMITTELN ======
+-- ====== Toleranz ======
+local tolerance = 0.5
 
-if (M20 > M10) then
-  M30 = 1
-elseif (M20 < M10) then
-  M30 = -1
+-- ====== Behang Richtung ======
+if math.abs(M15 - M13) < tolerance then
+  M13 = M15
+  M17 = 0
 else
-  M30 = 0
+  M17 = (M15 > M13) and 1 or -1
 end
 
-
--- ====== BEHANG FAHREN ======
-
-if (M30 != 0 and M12 == 0) then
-  M31 = 0
+-- ====== Moduswahl ======
+if M17 ~= 0 then
+  M18 = 0
+elseif math.abs(M16 - M14) >= tolerance then
+  M18 = 1
+else
+  M18 = -1
 end
 
+-- ====== Bewegung ======
+-- Flankenerkennung: nur ausführen bei steigender Flanke von T5
+if (T5 == 1 and M19 == 0) then
 
--- ====== LAMELLEN FAHREN ======
+  -- alles aus
+  UniversalAktor#Q5 = 0
+  UniversalAktor#Q6 = 0
 
-if (M30 == 0 and M21 != M12) then
-  M31 = 1
-end
-
-
--- ====== BEWEGUNG ======
-
-if (T5 == 1) then
-
-  -- ===== BEHANG =====
-  if (M31 == 0 and M30 != 0) then
-
-    if (M30 == 1) then
-      UniversalAktor#Q5 = 1
-      UniversalAktor#Q6 = 0
-      M10 = math.min(M10 + 0.263, 100)
-    end
-
-    if (M30 == -1) then
-      UniversalAktor#Q5 = 0
-      UniversalAktor#Q6 = 1
-      M10 = math.max(M10 - 0.263, 0)
-    end
-
-  else
-    UniversalAktor#Q5 = 0
-    UniversalAktor#Q6 = 0
+  if M18 == 0 then
+      if M17 == 1 then
+          UniversalAktor#Q5 = 1
+          M13 = math.min(M13 + 0.526, 100)
+      elseif M17 == -1 then
+          UniversalAktor#Q6 = 1
+          M13 = math.max(M13 - 0.526, 0)
+      end
   end
 
-
-  -- ===== LAMELLEN =====
-  if (M31 == 1) then
-
-    if (M21 > M12) then
-      UniversalAktor#Q5 = 1
-      UniversalAktor#Q6 = 0
-      M12 = math.min(M12 + 2.0, 100)
-    end
-
-    if (M21 < M12) then
-      UniversalAktor#Q5 = 0
-      UniversalAktor#Q6 = 1
-      M12 = math.max(M12 - 2.0, 0)
-    end
-
+  if M18 == 1 then
+      if M16 > M14 then
+          UniversalAktor#Q5 = 1
+          M14 = math.min(M14 + 14.28, 100, M16)
+      elseif M16 < M14 then
+          UniversalAktor#Q6 = 1
+          M14 = math.max(M14 - 14.28, 0, M16)
+      end
   end
-
 end
+
+-- Merker für nächsten Zyklus aktualisieren
+M19 = T5
