@@ -1,0 +1,71 @@
+-- Takt läuft permanent
+T5 = 1
+
+-- ====== FAHRTRICHTUNG ERMITTELN ======
+
+if (M20 > M10) then
+  M30 = 1
+elseif (M20 < M10) then
+  M30 = -1
+else
+  M30 = 0
+end
+
+
+-- ====== BEHANG FAHREN ======
+
+if (M30 != 0 and M12 == 0) then
+  M31 = 0
+end
+
+
+-- ====== LAMELLEN FAHREN ======
+
+if (M30 == 0 and M21 != M12) then
+  M31 = 1
+end
+
+
+-- ====== BEWEGUNG ======
+
+if (T5 == 1) then
+
+  -- ===== BEHANG =====
+  if (M31 == 0 and M30 != 0) then
+
+    if (M30 == 1) then
+      UniversalAktor#Q5 = 1
+      UniversalAktor#Q6 = 0
+      M10 = math.min(M10 + 0.263, 100)
+    end
+
+    if (M30 == -1) then
+      UniversalAktor#Q5 = 0
+      UniversalAktor#Q6 = 1
+      M10 = math.max(M10 - 0.263, 0)
+    end
+
+  else
+    UniversalAktor#Q5 = 0
+    UniversalAktor#Q6 = 0
+  end
+
+
+  -- ===== LAMELLEN =====
+  if (M31 == 1) then
+
+    if (M21 > M12) then
+      UniversalAktor#Q5 = 1
+      UniversalAktor#Q6 = 0
+      M12 = math.min(M12 + 2.0, 100)
+    end
+
+    if (M21 < M12) then
+      UniversalAktor#Q5 = 0
+      UniversalAktor#Q6 = 1
+      M12 = math.max(M12 - 2.0, 0)
+    end
+
+  end
+
+end
