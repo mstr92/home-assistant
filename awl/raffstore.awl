@@ -53,20 +53,20 @@ if (T5 == 1 and M19 == 0) then
 
   if M18 == 0 then
       if M17 == 1 then
-          UniversalAktor#Q5 = 1
+          UniversalAktor#Q6 = 1
           M13 = math.min(M13 + 0.526, 100)
       elseif M17 == -1 then
-          UniversalAktor#Q6 = 1
+          UniversalAktor#Q5 = 1
           M13 = math.max(M13 - 0.526, 0)
       end
   end
 
   if M18 == 1 then
       if M16 > M14 then
-          UniversalAktor#Q5 = 1
+          UniversalAktor#Q6 = 1
           M14 = math.min(M14 + 14.28, 100, M16)
       elseif M16 < M14 then
-          UniversalAktor#Q6 = 1
+          UniversalAktor#Q5 = 1
           M14 = math.max(M14 - 14.28, 0, M16)
       end
   end

@@ -4,8 +4,8 @@ views:
     path: steuerung
     cards:
       - type: tile
-        entity: cover.aussenjalousie
-        name: Aussenjalousie
+        entity: cover.raffstore_wohnzimmer_west
+        name: Raffstore Wohnzimmer West
         icon: mdi:window-shutter
         state_content:
           - state
@@ -14,6 +14,10 @@ views:
           - type: cover-open-close
           - type: cover-position
           - type: cover-tilt-position
-      - type: entity
-        entity: sensor.aussenjalousie_position
-        name: Jalousie Position (M10)
+      - type: entities
+        title: Raffstore Sensoren
+        entities:
+          - entity: sensor.raffstore_position
+            name: Behang Position (M13)
+          - entity: sensor.raffstore_lamelle
+            name: Lamellen Position (M14)
