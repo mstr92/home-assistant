@@ -1,0 +1,127 @@
+
+--M49	Istposition Behang (0–100)
+--M50	Istposition Lamelle (0–100)
+--M51	API Befehl
+--M52	Ziel Behang (-1 = deaktiviert)
+--M53	Ziel Lamelle (-1 = deaktiviert)
+--M54	Zustand (State Machine)
+--M55	Watchdog Zähler
+--M56	Kalibrierbefehl
+--M57	Flankenspeicher
+
+-- =========================================
+-- PROFESSIONELLE RAFFSTORE STEUERUNG
+-- Küche Süd — M49–M57 / Q1–Q2
+-- =========================================
+
+local BEHANG_STEP = 0.526
+local LAM_STEP = 14.28
+local TOL = 0.5
+local LAM_TOL = 8
+T5 = 1
+
+-- Flankenerkennung
+if T5 == 1 and M57 == 0 then
+
+  -- Sicherheitsabschaltung
+  UniversalAktor#Q1 = 0
+  UniversalAktor#Q2 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M51 == 5 then
+      M54 = 0
+      M51 = 0
+  end
+
+  -- =====================================
+  -- KALIBRIERUNG
+  -- =====================================
+  if M56 == 1 then
+      M54 = 9
+      M56 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M51 == 1 then M54 = 1 M51 = 0 end
+  if M51 == 2 then M54 = 2 M51 = 0 end
+  if M51 == 3 then M54 = 3 M51 = 0 end
+  if M51 == 4 then M54 = 4 M51 = 0 end
+
+  -- =====================================
+  -- ZIELPOSITION BEHANG
+  -- =====================================
+  if M52 >= 0 then
+      if math.abs(M52 - M49) < TOL then
+          M52 = -1
+          M54 = 0
+      else
+          M54 = (M52 > M49) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZIELPOSITION LAMELLE
+  -- =====================================
+  if M53 >= 0 and (M54 == 0 or M54 == 3 or M54 == 4) then
+      if math.abs(M53 - M50) < LAM_TOL then
+          M53 = -1
+          M54 = 0
+      else
+          M54 = (M53 > M50) and 4 or 3
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M54 == 1 then
+      UniversalAktor#Q1 = 1
+      M49 = math.max(M49 - BEHANG_STEP, 0)
+      M50 = 0
+
+  elseif M54 == 2 then
+      UniversalAktor#Q2 = 1
+      M49 = math.min(M49 + BEHANG_STEP, 100)
+      M50 = 100
+
+  elseif M54 == 3 then
+      if M49 > 0 and M49 < 100 then
+        UniversalAktor#Q1 = 1
+        M50 = math.max(M50 - LAM_STEP, 0)
+      end
+
+  elseif M54 == 4 then
+    if M49 > 0 and M49 < 100 then
+      UniversalAktor#Q2 = 1
+      M50 = math.min(M50 + LAM_STEP, 100)
+    end
+
+  elseif M54 == 9 then
+      UniversalAktor#Q1 = 1
+      M49 = 0
+      M50 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M54 ~= 0 then
+      M55 = M55 + 1
+      if M55 > 500 then
+          M54 = 0
+          M55 = 0
+      end
+  else
+      M55 = 0
+  end
+
+  if(M49 == 100 or M49 == 0) then
+     M54 = 0
+  end
+end
+
+M57 = T5

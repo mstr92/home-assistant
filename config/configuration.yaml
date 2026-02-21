@@ -31,6 +31,7 @@ rest:
     scan_interval: 1
     sensor:
       - name: "Raffstore Position"
+        unique_id: raffstore_position_m13
         value_template: "{{ value }}"
         unit_of_measurement: "%"
   # M14 = Istposition Lamelle (0–100), aktualisiert vom AWL-Script
@@ -40,6 +41,145 @@ rest:
     scan_interval: 1
     sensor:
       - name: "Raffstore Lamelle"
+        unique_id: raffstore_lamelle_m14
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # LED Band Wohnzimmer — Universal-Dimmer Q5 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q5"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Band Helligkeit"
+        unique_id: led_band_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # LED Spots Wohnzimmer — Universal-Dimmer Q6 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q6"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Spots Helligkeit"
+        unique_id: led_spots_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # Deckenlampe Wohnzimmer — IO-Server Q6 (0/1)
+  - resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q6"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    binary_sensor:
+      - name: "Deckenlampe Zustand"
+        unique_id: deckenlampe_zustand
+        value_template: "{{ value | int(0) > 0 }}"
+  # LED Spots Küche vorne — Universal-Dimmer Q3 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q3"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Spots Kueche Vorne Helligkeit"
+        unique_id: led_spots_kueche_vorne_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # LED Spots Küche hinten — Universal-Dimmer Q4 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q4"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Spots Kueche Hinten Helligkeit"
+        unique_id: led_spots_kueche_hinten_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # LED Band Essbereich — Universal-Dimmer Q1 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q1"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Band Essbereich Helligkeit"
+        unique_id: led_band_essbereich_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # LED Spots Essbereich — Universal-Dimmer Q2 (0–100%)
+  - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q2"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "LED Spots Essbereich Helligkeit"
+        unique_id: led_spots_essbereich_helligkeit
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # Deckenlampe Essbereich — IO-Server Q7 (0/1)
+  - resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q7"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    binary_sensor:
+      - name: "Deckenlampe Essbereich Zustand"
+        unique_id: deckenlampe_essbereich_zustand
+        value_template: "{{ value | int(0) > 0 }}"
+  # M31 = Istposition Behang Essbereich (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M31"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Essbereich Position"
+        unique_id: raffstore_essbereich_position_m31
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # M32 = Istposition Lamelle Essbereich (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M32"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Essbereich Lamelle"
+        unique_id: raffstore_essbereich_lamelle_m32
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # M40 = Istposition Behang Küche Ost (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M40"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Kueche Ost Position"
+        unique_id: raffstore_kueche_ost_position_m40
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # M41 = Istposition Lamelle Küche Ost (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M41"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Kueche Ost Lamelle"
+        unique_id: raffstore_kueche_ost_lamelle_m41
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # M49 = Istposition Behang Küche Süd (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M49"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Kueche Sued Position"
+        unique_id: raffstore_kueche_sued_position_m49
+        value_template: "{{ value }}"
+        unit_of_measurement: "%"
+  # M50 = Istposition Lamelle Küche Süd (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M50"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Raffstore Kueche Sued Lamelle"
+        unique_id: raffstore_kueche_sued_lamelle_m50
         value_template: "{{ value }}"
         unit_of_measurement: "%"
   # M22 = Istposition Behang Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
@@ -49,6 +189,7 @@ rest:
     scan_interval: 1
     sensor:
       - name: "Raffstore Sued Position"
+        unique_id: raffstore_sued_position_m22
         value_template: "{{ value }}"
         unit_of_measurement: "%"
   # M23 = Istposition Lamelle Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
@@ -58,12 +199,18 @@ rest:
     scan_interval: 1
     sensor:
       - name: "Raffstore Sued Lamelle"
+        unique_id: raffstore_sued_lamelle_m23
         value_template: "{{ value }}"
         unit_of_measurement: "%"
 
 rest_command:
   comexio_set_marker:
     url: "http://192.168.1.127/api/?action=set&marker={{ marker }}&value={{ value }}"
+    method: GET
+    username: !secret comexio_user
+    password: !secret comexio_password
+  comexio_set_ext:
+    url: "http://192.168.1.127/api/?action=set&ext={{ ext }}&io={{ io }}&value={{ value }}"
     method: GET
     username: !secret comexio_user
     password: !secret comexio_password
@@ -140,3 +287,289 @@ template:
             data:
               marker: M26
               value: "{{ 100 - tilt }}"
+      # Raffstore Essbereich — gesteuert über Merker (AWL: raffstore_profi_essbereich.awl)
+      # M33 = API Befehl (1=Hoch, 2=Runter, 3=Lam.Öffnen, 4=Lam.Schließen, 5=Stop)
+      # M34 = Ziel Behang (-1=deaktiviert, 0-100), M35 = Ziel Lamelle
+      - name: "Raffstore Essbereich"
+        device_class: shutter
+        unique_id: raffstore_essbereich
+        position: "{{ 100 - (states('sensor.raffstore_essbereich_position') | float(0) | round(0) | int) }}"
+        open_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M33
+              value: 1
+        close_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M33
+              value: 2
+        stop_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M33
+              value: 5
+        set_cover_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M34
+              value: "{{ 100 - position }}"
+        tilt: "{{ 100 - (states('sensor.raffstore_essbereich_lamelle') | float(0) | round(0) | int) }}"
+        set_cover_tilt_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M35
+              value: "{{ 100 - tilt }}"
+      # Raffstore Küche Ost — gesteuert über Merker (AWL: raffstore_profi_kueche_ost.awl)
+      # M42 = API Befehl (1=Hoch, 2=Runter, 3=Lam.Öffnen, 4=Lam.Schließen, 5=Stop)
+      # M43 = Ziel Behang (-1=deaktiviert, 0-100), M44 = Ziel Lamelle
+      - name: "Raffstore Küche Ost"
+        device_class: shutter
+        unique_id: raffstore_kueche_ost
+        position: "{{ 100 - (states('sensor.raffstore_kueche_ost_position') | float(0) | round(0) | int) }}"
+        open_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M42
+              value: 1
+        close_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M42
+              value: 2
+        stop_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M42
+              value: 5
+        set_cover_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M43
+              value: "{{ 100 - position }}"
+        tilt: "{{ 100 - (states('sensor.raffstore_kueche_ost_lamelle') | float(0) | round(0) | int) }}"
+        set_cover_tilt_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M44
+              value: "{{ 100 - tilt }}"
+      # Raffstore Küche Süd — gesteuert über Merker (AWL: raffstore_profi_kueche_sued.awl)
+      # M51 = API Befehl (1=Hoch, 2=Runter, 3=Lam.Öffnen, 4=Lam.Schließen, 5=Stop)
+      # M52 = Ziel Behang (-1=deaktiviert, 0-100), M53 = Ziel Lamelle
+      - name: "Raffstore Küche Süd"
+        device_class: shutter
+        unique_id: raffstore_kueche_sued
+        position: "{{ 100 - (states('sensor.raffstore_kueche_sued_position') | float(0) | round(0) | int) }}"
+        open_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M51
+              value: 1
+        close_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M51
+              value: 2
+        stop_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M51
+              value: 5
+        set_cover_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M52
+              value: "{{ 100 - position }}"
+        tilt: "{{ 100 - (states('sensor.raffstore_kueche_sued_lamelle') | float(0) | round(0) | int) }}"
+        set_cover_tilt_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M53
+              value: "{{ 100 - tilt }}"
+  - light:
+      # LED Band Wohnzimmer — Universal-Dimmer Q5
+      - name: "LED Band Wohnzimmer"
+        unique_id: led_band_wohnzimmer
+        state: "{{ states('sensor.led_band_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_band_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q5"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q5"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q5"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # LED Spots Wohnzimmer — Universal-Dimmer Q6
+      - name: "LED Spots Wohnzimmer"
+        unique_id: led_spots_wohnzimmer
+        state: "{{ states('sensor.led_spots_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_spots_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q6"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q6"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q6"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # Deckenlampe Wohnzimmer — IO-Server Q6 (Ein/Aus)
+      - name: "Deckenlampe Wohnzimmer"
+        unique_id: deckenlampe_wohnzimmer
+        state: "{{ states('binary_sensor.deckenlampe_zustand') == 'on' }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "IO-Server"
+              io: "Q6"
+              value: 1
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "IO-Server"
+              io: "Q6"
+              value: 0
+      # LED Band Essbereich — Universal-Dimmer Q1
+      - name: "LED Band Essbereich"
+        unique_id: led_band_essbereich
+        state: "{{ states('sensor.led_band_essbereich_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_band_essbereich_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q1"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q1"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q1"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # LED Spots Essbereich — Universal-Dimmer Q2
+      - name: "LED Spots Essbereich"
+        unique_id: led_spots_essbereich
+        state: "{{ states('sensor.led_spots_essbereich_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_spots_essbereich_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q2"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q2"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q2"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # LED Spots Küche vorne — Universal-Dimmer Q3
+      - name: "LED Spots Küche Vorne"
+        unique_id: led_spots_kueche_vorne
+        state: "{{ states('sensor.led_spots_kueche_vorne_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_spots_kueche_vorne_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q3"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q3"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q3"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # LED Spots Küche hinten — Universal-Dimmer Q4
+      - name: "LED Spots Küche Hinten"
+        unique_id: led_spots_kueche_hinten
+        state: "{{ states('sensor.led_spots_kueche_hinten_helligkeit') | int(0) > 0 }}"
+        level: "{{ (states('sensor.led_spots_kueche_hinten_helligkeit') | float(0) / 100 * 255) | int }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q4"
+              value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q4"
+              value: 0
+        set_level:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "Universal-Dimmer"
+              io: "Q4"
+              value: "{{ (brightness / 255 * 100) | int }}"
+      # Deckenlampe Essbereich — IO-Server Q7 (Ein/Aus)
+      - name: "Deckenlampe Essbereich"
+        unique_id: deckenlampe_essbereich
+        state: "{{ states('binary_sensor.deckenlampe_essbereich_zustand') == 'on' }}"
+        turn_on:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "IO-Server"
+              io: "Q7"
+              value: 1
+        turn_off:
+          - action: rest_command.comexio_set_ext
+            data:
+              ext: "IO-Server"
+              io: "Q7"
+              value: 0
+
+light:
+  - platform: group
+    name: "LED Spots Küche"
+    unique_id: led_spots_kueche_gruppe
+    entities:
+      - light.led_spots_kuche_vorne
+      - light.led_spots_kuche_hinten
+
+cover:
+  - platform: group
+    name: "Raffstores Wohnzimmer"
+    unique_id: raffstores_wohnzimmer_gruppe
+    entities:
+      - cover.raffstore_wohnzimmer_west
+      - cover.raffstore_wohnzimmer_sued

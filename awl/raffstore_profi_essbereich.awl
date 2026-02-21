@@ -1,0 +1,136 @@
+
+--M31	Istposition Behang (0–100)
+--M32	Istposition Lamelle (0–100)
+--M33	API Befehl
+--M34	Ziel Behang (-1 = deaktiviert)
+--M35	Ziel Lamelle (-1 = deaktiviert)
+--M36	Zustand (State Machine)
+--M37	Watchdog Zähler
+--M38	Kalibrierbefehl
+--M39	Flankenspeicher
+
+-- =========================================
+-- PROFESSIONELLE RAFFSTORE STEUERUNG
+-- Essbereich — M31–M39 / Q9–Q10
+-- =========================================
+
+local BEHANG_STEP = 0.526
+local LAM_STEP = 14.28
+local TOL = 0.5
+local LAM_TOL = 8
+T5 = 1
+
+-- Flankenerkennung
+if T5 == 1 and M39 == 0 then
+
+  -- Sicherheitsabschaltung
+  UniversalAktor#Q9 = 0
+  UniversalAktor#Q10 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M33 == 5 then
+      M36 = 0
+      M33 = 0
+  end
+
+  -- =====================================
+  -- KALIBRIERUNG
+  -- =====================================
+  if M38 == 1 then
+      M36 = 9
+      M38 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M33 == 1 then
+    M36 = 1
+    M33 = 0
+  end
+  if M33 == 2 then
+    M36 = 2
+    M33 = 0
+  end
+  if M33 == 3 then M36 = 3 M33 = 0 end
+  if M33 == 4 then M36 = 4 M33 = 0 end
+
+  -- =====================================
+  -- ZIELPOSITION BEHANG
+  -- =====================================
+  if M34 >= 0 then
+      if math.abs(M34 - M31) < TOL then
+          M34 = -1
+          M36 = 0
+      else
+          M36 = (M34 > M31) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZIELPOSITION LAMELLE
+  -- Nur wenn Behang steht oder Lamelle bereits läuft
+  -- =====================================
+  if M35 >= 0 and (M36 == 0 or M36 == 3 or M36 == 4) then
+      if math.abs(M35 - M32) < LAM_TOL then
+          M35 = -1
+          M36 = 0
+      else
+          M36 = (M35 > M32) and 4 or 3
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M36 == 1 then
+      UniversalAktor#Q9 = 1
+      M31 = math.max(M31 - BEHANG_STEP, 0)
+      M32 = 0
+
+  elseif M36 == 2 then
+      UniversalAktor#Q10 = 1
+      M31 = math.min(M31 + BEHANG_STEP, 100)
+      M32 = 100
+
+  elseif M36 == 3 then
+      if M31 > 0 and M31 < 100 then
+        UniversalAktor#Q9 = 1
+        M32 = math.max(M32 - LAM_STEP, 0)
+      end
+
+  elseif M36 == 4 then
+    if M31 > 0 and M31 < 100 then
+      UniversalAktor#Q10 = 1
+      M32 = math.min(M32 + LAM_STEP, 100)
+    end
+
+  elseif M36 == 9 then
+      -- Referenzfahrt unten
+      UniversalAktor#Q9 = 1
+      M31 = 0
+      M32 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M36 ~= 0 then
+      M37 = M37 + 1
+      if M37 > 500 then
+          M36 = 0
+          M37 = 0
+      end
+  else
+      M37 = 0
+  end
+
+  -- Set M36 to 0 wenn ganz oben oder ganz unten
+  if(M31 == 100 or M31 == 0) then
+     M36 = 0
+  end
+end
+
+M39 = T5
