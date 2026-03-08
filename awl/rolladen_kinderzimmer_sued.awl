@@ -1,0 +1,93 @@
+
+--M58	Istposition Rolladen (0–100)
+--M59	API Befehl (1=Hoch, 2=Runter, 5=Stop)
+--M60	Ziel Position (-1 = deaktiviert)
+--M61	Zustand (State Machine)
+--M62	Watchdog Zähler
+--M63	Flankenspeicher
+
+-- =========================================
+-- ROLLADEN STEUERUNG
+-- Kinderzimmer West — M58–M63 / IO-Server Q1–Q2
+-- =========================================
+
+local ROLLADEN_STEP = 0.526   -- Anpassen: 100 / Laufzeit_in_Sekunden
+local TOL = 0.5
+T5 = 1
+
+-- Flankenerkennung
+if T5 == 1 and M63 == 0 then
+
+  -- Sicherheitsabschaltung
+  IO-Server#Q1 = 0
+  IO-Server#Q2 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M59 == 5 then
+      M61 = 0
+      M59 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M59 == 1 then
+    M61 = 1
+    M59 = 0
+  end
+  if M59 == 2 then
+    M61 = 2
+    M59 = 0
+  end
+
+  -- =====================================
+  -- ZIELPOSITION
+  -- =====================================
+  if M60 >= 0 then
+      if math.abs(M60 - M58) < TOL then
+          M60 = -1
+          M61 = 0
+      else
+          M61 = (M60 > M58) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M61 == 1 then
+      IO-Server#Q1 = 1
+      M58 = math.max(M58 - ROLLADEN_STEP, 0)
+
+  elseif M61 == 2 then
+      IO-Server#Q2 = 1
+      M58 = math.min(M58 + ROLLADEN_STEP, 100)
+
+  elseif M61 == 9 then
+      -- Referenzfahrt oben
+      IO-Server#Q1 = 1
+      M58 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M61 ~= 0 then
+      M62 = M62 + 1
+      if M62 > 500 then
+          M61 = 0
+          M62 = 0
+      end
+  else
+      M62 = 0
+  end
+
+  -- Stop wenn ganz oben oder ganz unten
+  if(M58 == 100 or M58 == 0) then
+     M61 = 0
+  end
+end
+
+M63 = T5

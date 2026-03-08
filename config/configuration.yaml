@@ -32,7 +32,7 @@ rest:
     sensor:
       - name: "Raffstore Position"
         unique_id: raffstore_position_m13
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M14 = Istposition Lamelle (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M14"
@@ -42,7 +42,7 @@ rest:
     sensor:
       - name: "Raffstore Lamelle"
         unique_id: raffstore_lamelle_m14
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # LED Band Wohnzimmer — Universal-Dimmer Q5 (0–100%)
   - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q5"
@@ -52,7 +52,7 @@ rest:
     sensor:
       - name: "LED Band Helligkeit"
         unique_id: led_band_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # LED Spots Wohnzimmer — Universal-Dimmer Q6 (0–100%)
   - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q6"
@@ -62,7 +62,7 @@ rest:
     sensor:
       - name: "LED Spots Helligkeit"
         unique_id: led_spots_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # Deckenlampe Wohnzimmer — IO-Server Q6 (0/1)
   - resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q6"
@@ -81,7 +81,7 @@ rest:
     sensor:
       - name: "LED Spots Kueche Vorne Helligkeit"
         unique_id: led_spots_kueche_vorne_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # LED Spots Küche hinten — Universal-Dimmer Q4 (0–100%)
   - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q4"
@@ -91,7 +91,7 @@ rest:
     sensor:
       - name: "LED Spots Kueche Hinten Helligkeit"
         unique_id: led_spots_kueche_hinten_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # LED Band Essbereich — Universal-Dimmer Q1 (0–100%)
   - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q1"
@@ -101,7 +101,7 @@ rest:
     sensor:
       - name: "LED Band Essbereich Helligkeit"
         unique_id: led_band_essbereich_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # LED Spots Essbereich — Universal-Dimmer Q2 (0–100%)
   - resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q2"
@@ -111,7 +111,7 @@ rest:
     sensor:
       - name: "LED Spots Essbereich Helligkeit"
         unique_id: led_spots_essbereich_helligkeit
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # Deckenlampe Essbereich — IO-Server Q7 (0/1)
   - resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q7"
@@ -130,7 +130,7 @@ rest:
     sensor:
       - name: "Raffstore Essbereich Position"
         unique_id: raffstore_essbereich_position_m31
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M32 = Istposition Lamelle Essbereich (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M32"
@@ -140,7 +140,7 @@ rest:
     sensor:
       - name: "Raffstore Essbereich Lamelle"
         unique_id: raffstore_essbereich_lamelle_m32
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M40 = Istposition Behang Küche Ost (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M40"
@@ -150,7 +150,7 @@ rest:
     sensor:
       - name: "Raffstore Kueche Ost Position"
         unique_id: raffstore_kueche_ost_position_m40
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M41 = Istposition Lamelle Küche Ost (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M41"
@@ -160,7 +160,7 @@ rest:
     sensor:
       - name: "Raffstore Kueche Ost Lamelle"
         unique_id: raffstore_kueche_ost_lamelle_m41
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M49 = Istposition Behang Küche Süd (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M49"
@@ -170,7 +170,7 @@ rest:
     sensor:
       - name: "Raffstore Kueche Sued Position"
         unique_id: raffstore_kueche_sued_position_m49
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M50 = Istposition Lamelle Küche Süd (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M50"
@@ -180,7 +180,7 @@ rest:
     sensor:
       - name: "Raffstore Kueche Sued Lamelle"
         unique_id: raffstore_kueche_sued_lamelle_m50
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M22 = Istposition Behang Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M22"
@@ -190,7 +190,7 @@ rest:
     sensor:
       - name: "Raffstore Sued Position"
         unique_id: raffstore_sued_position_m22
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
   # M23 = Istposition Lamelle Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
   - resource: "http://192.168.1.127/api/?action=get&marker=M23"
@@ -200,7 +200,17 @@ rest:
     sensor:
       - name: "Raffstore Sued Lamelle"
         unique_id: raffstore_sued_lamelle_m23
-        value_template: "{{ value }}"
+        value_template: "{{ value.split(':')[0] | int(0) }}"
+        unit_of_measurement: "%"
+  # M58 = Istposition Rolladen Kinderzimmer Süd (0–100), aktualisiert vom AWL-Script
+  - resource: "http://192.168.1.127/api/?action=get&marker=M58"
+    username: !secret comexio_user
+    password: !secret comexio_password
+    scan_interval: 1
+    sensor:
+      - name: "Rolladen Kinderzimmer Süd Position"
+        unique_id: rolladen_kinderzimmer_sued_position_m58
+        value_template: "{{ value.split(':')[0] | int(0) }}"
         unit_of_measurement: "%"
 
 rest_command:
@@ -386,6 +396,33 @@ template:
             data:
               marker: M53
               value: "{{ 100 - tilt }}"
+      # Rolladen Kinderzimmer Süd — gesteuert über Merker (AWL: rolladen_kinderzimmer_sued.awl)
+      # M59 = API Befehl (1=Hoch, 2=Runter, 5=Stop)
+      # M60 = Ziel Position (-1=deaktiviert, 0-100)
+      - name: "Rolladen Kinderzimmer Süd"
+        device_class: shutter
+        unique_id: rolladen_kinderzimmer_sued
+        position: "{{ 100 - (states('sensor.rolladen_kinderzimmer_sued_position') | float(0) | round(0) | int) }}"
+        open_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M59
+              value: 1
+        close_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M59
+              value: 2
+        stop_cover:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M59
+              value: 5
+        set_cover_position:
+          - action: rest_command.comexio_set_marker
+            data:
+              marker: M60
+              value: "{{ 100 - position }}"
   - light:
       # LED Band Wohnzimmer — Universal-Dimmer Q5
       - name: "LED Band Wohnzimmer"
