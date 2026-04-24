@@ -1,4 +1,3 @@
-
 --M13	Istposition Behang (0–100)
 --M14	Istposition Lamelle (0–100)
 --M15	API Befehl
@@ -97,13 +96,13 @@ if T5 == 1 and M21 == 0 then
       M14 = 100
 
   elseif M18 == 3 then
-      if M13 > 0 and M13 < 100 then
+      if M13 > 0 then
         UniversalAktor#Q5 = 1
         M14 = math.max(M14 - LAM_STEP, 0)
       end 
 
   elseif M18 == 4 then
-    if M13 > 0 and M13 < 100 then
+    if M13 > 0 then
       UniversalAktor#Q6 = 1
       M14 = math.min(M14 + LAM_STEP, 100)
     end 

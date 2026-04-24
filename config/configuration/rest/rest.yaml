@@ -1,0 +1,188 @@
+# M13 = Istposition Behang (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M13"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Position"
+      unique_id: raffstore_position_m13
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M14 = Istposition Lamelle (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M14"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Lamelle"
+      unique_id: raffstore_lamelle_m14
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# LED Band Wohnzimmer — Universal-Dimmer Q5 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q5"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Band Helligkeit"
+      unique_id: led_band_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# LED Spots Wohnzimmer — Universal-Dimmer Q6 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q6"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Spots Helligkeit"
+      unique_id: led_spots_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# Deckenlampe Wohnzimmer — IO-Server Q6 (0/1)
+- resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q6"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  binary_sensor:
+    - name: "Deckenlampe Zustand"
+      unique_id: deckenlampe_zustand
+      value_template: "{{ value | int(0) > 0 }}"
+# LED Spots Küche vorne — Universal-Dimmer Q3 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q3"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Spots Kueche Vorne Helligkeit"
+      unique_id: led_spots_kueche_vorne_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# LED Spots Küche hinten — Universal-Dimmer Q4 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q4"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Spots Kueche Hinten Helligkeit"
+      unique_id: led_spots_kueche_hinten_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# LED Band Essbereich — Universal-Dimmer Q1 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q1"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Band Essbereich Helligkeit"
+      unique_id: led_band_essbereich_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# LED Spots Essbereich — Universal-Dimmer Q2 (0–100%)
+- resource: "http://192.168.1.127/api/?action=get&ext=Universal-Dimmer&io=Q2"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "LED Spots Essbereich Helligkeit"
+      unique_id: led_spots_essbereich_helligkeit
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# Deckenlampe Essbereich — IO-Server Q7 (0/1)
+- resource: "http://192.168.1.127/api/?action=get&ext=IO-Server&io=Q7"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  binary_sensor:
+    - name: "Deckenlampe Essbereich Zustand"
+      unique_id: deckenlampe_essbereich_zustand
+      value_template: "{{ value | int(0) > 0 }}"
+# M31 = Istposition Behang Essbereich (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M31"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Essbereich Position"
+      unique_id: raffstore_essbereich_position_m31
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M32 = Istposition Lamelle Essbereich (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M32"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Essbereich Lamelle"
+      unique_id: raffstore_essbereich_lamelle_m32
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M40 = Istposition Behang Küche Ost (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M40"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Kueche Ost Position"
+      unique_id: raffstore_kueche_ost_position_m40
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M41 = Istposition Lamelle Küche Ost (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M41"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Kueche Ost Lamelle"
+      unique_id: raffstore_kueche_ost_lamelle_m41
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M49 = Istposition Behang Küche Süd (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M49"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Kueche Sued Position"
+      unique_id: raffstore_kueche_sued_position_m49
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M50 = Istposition Lamelle Küche Süd (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M50"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Kueche Sued Lamelle"
+      unique_id: raffstore_kueche_sued_lamelle_m50
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M22 = Istposition Behang Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M22"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Sued Position"
+      unique_id: raffstore_sued_position_m22
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M23 = Istposition Lamelle Wohnzimmer Süd (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M23"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Raffstore Sued Lamelle"
+      unique_id: raffstore_sued_lamelle_m23
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M58 = Istposition Rolladen Kinderzimmer Süd (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M58"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Rolladen Kinderzimmer Süd Position"
+      unique_id: rolladen_kinderzimmer_sued_position_m58
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"

@@ -1,0 +1,6 @@
+- platform: group
+  name: "Raffstores Wohnzimmer"
+  unique_id: raffstores_wohnzimmer_gruppe
+  entities:
+    - cover.raffstore_wohnzimmer_west
+    - cover.raffstore_wohnzimmer_sued

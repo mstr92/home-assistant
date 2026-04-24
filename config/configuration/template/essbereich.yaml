@@ -1,0 +1,98 @@
+- cover:
+    # Raffstore Essbereich — gesteuert über Merker (AWL: raffstore_profi_essbereich.awl)
+    # M33 = API Befehl (1=Hoch, 2=Runter, 3=Lam.Öffnen, 4=Lam.Schließen, 5=Stop)
+    # M34 = Ziel Behang (-1=deaktiviert, 0-100), M35 = Ziel Lamelle
+    - name: "Raffstore Essbereich"
+      device_class: shutter
+      unique_id: raffstore_essbereich
+      position: "{{ 100 - (states('sensor.raffstore_essbereich_position') | float(0) | round(0) | int) }}"
+      open_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M33
+            value: 1
+      close_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M33
+            value: 2
+      stop_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M33
+            value: 5
+      set_cover_position:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M34
+            value: "{{ 100 - position }}"
+      tilt: "{{ 100 - (states('sensor.raffstore_essbereich_lamelle') | float(0) | round(0) | int) }}"
+      set_cover_tilt_position:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M35
+            value: "{{ 100 - tilt }}"
+
+- light:
+    # LED Band Essbereich — Universal-Dimmer Q1
+    - name: "LED Band Essbereich"
+      unique_id: led_band_essbereich
+      state: "{{ states('sensor.led_band_essbereich_helligkeit') | int(0) > 0 }}"
+      level: "{{ (states('sensor.led_band_essbereich_helligkeit') | float(0) / 100 * 255) | int }}"
+      turn_on:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q1"
+            value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+      turn_off:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q1"
+            value: 0
+      set_level:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q1"
+            value: "{{ (brightness / 255 * 100) | int }}"
+    # LED Spots Essbereich — Universal-Dimmer Q2
+    - name: "LED Spots Essbereich"
+      unique_id: led_spots_essbereich
+      state: "{{ states('sensor.led_spots_essbereich_helligkeit') | int(0) > 0 }}"
+      level: "{{ (states('sensor.led_spots_essbereich_helligkeit') | float(0) / 100 * 255) | int }}"
+      turn_on:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q2"
+            value: "{{ [((brightness | default(255)) / 255 * 100) | int, 1] | max }}"
+      turn_off:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q2"
+            value: 0
+      set_level:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "Universal-Dimmer"
+            io: "Q2"
+            value: "{{ (brightness / 255 * 100) | int }}"
+    # Deckenlampe Essbereich — IO-Server Q7 (Ein/Aus)
+    - name: "Deckenlampe Essbereich"
+      unique_id: deckenlampe_essbereich
+      state: "{{ states('binary_sensor.deckenlampe_essbereich_zustand') == 'on' }}"
+      turn_on:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "IO-Server"
+            io: "Q7"
+            value: 1
+      turn_off:
+        - action: rest_command.comexio_set_ext
+          data:
+            ext: "IO-Server"
+            io: "Q7"
+            value: 0

@@ -14,11 +14,10 @@
 -- Küche Ost — M40–M48 / Q7–Q8
 -- =========================================
 
-local BEHANG_STEP = 0.526
+local BEHANG_STEP = 0.8
 local LAM_STEP = 14.28
 local TOL = 0.5
 local LAM_TOL = 8
-T5 = 1
 
 -- Flankenerkennung
 if T5 == 1 and M48 == 0 then
@@ -89,13 +88,13 @@ if T5 == 1 and M48 == 0 then
       M41 = 100
 
   elseif M45 == 3 then
-      if M40 > 0 and M40 < 100 then
+      if M40 > 0 then
         UniversalAktor#Q7 = 1
         M41 = math.max(M41 - LAM_STEP, 0)
       end
 
   elseif M45 == 4 then
-    if M40 > 0 and M40 < 100 then
+    if M40 > 0 then
       UniversalAktor#Q8 = 1
       M41 = math.min(M41 + LAM_STEP, 100)
     end

@@ -1,0 +1,6 @@
+- platform: group
+  name: "LED Spots Küche"
+  unique_id: led_spots_kueche_gruppe
+  entities:
+    - light.led_spots_kuche_vorne
+    - light.led_spots_kuche_hinten

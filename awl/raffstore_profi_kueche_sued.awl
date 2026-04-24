@@ -18,7 +18,6 @@ local BEHANG_STEP = 0.526
 local LAM_STEP = 14.28
 local TOL = 0.5
 local LAM_TOL = 8
-T5 = 1
 
 -- Flankenerkennung
 if T5 == 1 and M57 == 0 then
@@ -89,13 +88,13 @@ if T5 == 1 and M57 == 0 then
       M50 = 100
 
   elseif M54 == 3 then
-      if M49 > 0 and M49 < 100 then
+      if M49 > 0 then
         UniversalAktor#Q1 = 1
         M50 = math.max(M50 - LAM_STEP, 0)
       end
 
   elseif M54 == 4 then
-    if M49 > 0 and M49 < 100 then
+    if M49 > 0 then
       UniversalAktor#Q2 = 1
       M50 = math.min(M50 + LAM_STEP, 100)
     end
