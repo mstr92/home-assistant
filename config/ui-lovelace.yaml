@@ -4,6 +4,13 @@ views:
     path: steuerung
     cards:
       - type: tile
+        entity: cover.eg_raffstores_zentral_gruppe
+        name: Alle Raffstores runterfahren
+        icon: mdi:window-shutter
+        features:
+          - type: cover-open-close
+          - type: cover-position
+      - type: tile
         entity: cover.raffstore_wohnzimmer_west
         name: Raffstore Wohnzimmer West
         icon: mdi:window-shutter

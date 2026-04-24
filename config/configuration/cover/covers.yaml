@@ -3,4 +3,14 @@
   unique_id: raffstores_wohnzimmer_gruppe
   entities:
     - cover.raffstore_wohnzimmer_west
-    - cover.raffstore_wohnzimmer_sued
+    - cover.raffstore_wohnzimmer_sud
+
+- platform: group
+  name: "EG Raffstore Zentral"
+  unique_id: eg_raffstores_zentral_gruppe
+  entities:
+    - cover.raffstore_wohnzimmer_west
+    - cover.raffstore_wohnzimmer_sud
+    - cover.raffstore_essbereich
+    - cover.raffstore_kuche_ost
+    - cover.raffstore_kuche_sud
