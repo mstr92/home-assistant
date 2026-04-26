@@ -74,12 +74,15 @@ if T5 == 1 and M57 == 0 then
       end
   end
 
+  -- Überfahrt-Korrektur: ZIELPOSITION würde bei negativem Behang Richtung umkehren
+  if M49 < 0 then M54 = 1 end
+
   -- =====================================
   -- ZUSTANDSMASCHINE
   -- =====================================
   if M54 == 1 then
       UniversalAktor#Q1 = 1
-      M49 = math.max(M49 - BEHANG_STEP, 0)
+      M49 = M49 - BEHANG_STEP
       M50 = 0
 
   elseif M54 == 2 then
@@ -118,8 +121,11 @@ if T5 == 1 and M57 == 0 then
       M55 = 0
   end
 
-  if(M49 == 100 or M49 == 0) then
-     M54 = 0
+  if M49 >= 100 then M54 = 0 end
+  if M49 <= -10 then
+      M54 = 0
+      M52 = -1
+      M49 = 0
   end
 end
 
