@@ -1,0 +1,28 @@
+- cover:
+    # Rolladen Schlafzimmer — gesteuert über Merker (AWL: rolladen_schlafzimmer.awl)
+    # M65 = API Befehl (1=Hoch, 2=Runter, 5=Stop)
+    # M66 = Ziel Position (-1=deaktiviert, 0-100)
+    - name: "Rolladen Schlafzimmer"
+      device_class: shutter
+      unique_id: rolladen_schlafzimmer
+      position: "{{ 100 - (states('sensor.rolladen_schlafzimmer_position') | float(0) | round(0) | int) }}"
+      open_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M65
+            value: 1
+      close_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M65
+            value: 2
+      stop_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M65
+            value: 5
+      set_cover_position:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M66
+            value: "{{ 100 - position }}"

@@ -8,19 +8,18 @@
 
 -- =========================================
 -- ROLLADEN STEUERUNG
--- Kinderzimmer West — M58–M63 / IO-Server Q1–Q2
+-- Kinderzimmer West — M58–M63 / UniversalAktor Q15-Q16
 -- =========================================
 
-local ROLLADEN_STEP = 0.526   -- Anpassen: 100 / Laufzeit_in_Sekunden
-local TOL = 0.5
-T5 = 1
+local ROLLADEN_STEP = 0.96  -- Anpassen: 100 / Laufzeit_in_Sekunden
+local TOL = 0.2
 
 -- Flankenerkennung
 if T5 == 1 and M63 == 0 then
 
   -- Sicherheitsabschaltung
-  IO-Server#Q1 = 0
-  IO-Server#Q2 = 0
+  UniversalAktor#Q15 = 0
+  UniversalAktor#Q16 = 0
 
   -- =====================================
   -- STOP
@@ -58,16 +57,16 @@ if T5 == 1 and M63 == 0 then
   -- ZUSTANDSMASCHINE
   -- =====================================
   if M61 == 1 then
-      IO-Server#Q1 = 1
-      M58 = math.max(M58 - ROLLADEN_STEP, 0)
+      UniversalAktor#Q15 = 1
+      M58 = M58 - ROLLADEN_STEP
 
   elseif M61 == 2 then
-      IO-Server#Q2 = 1
+      UniversalAktor#Q16 = 1
       M58 = math.min(M58 + ROLLADEN_STEP, 100)
 
   elseif M61 == 9 then
       -- Referenzfahrt oben
-      IO-Server#Q1 = 1
+      UniversalAktor#Q15 = 1
       M58 = 0
   end
 
@@ -85,9 +84,15 @@ if T5 == 1 and M63 == 0 then
   end
 
   -- Stop wenn ganz oben oder ganz unten
-  if(M58 == 100 or M58 == 0) then
-     M61 = 0
-  end
+	if (M58 >= 100) then
+   	M61 = 0
+	end
+
+	-- oben NICHT sofort stoppen → Überfahrt erlauben
+	if (M58 <= -10) then   -- ca. 10% "Überfahrt"
+   		M61 = 0
+   		M58 = 0
+	end
 end
 
 M63 = T5

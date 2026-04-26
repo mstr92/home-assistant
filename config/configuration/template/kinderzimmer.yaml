@@ -5,7 +5,7 @@
     - name: "Rolladen Kinderzimmer Süd"
       device_class: shutter
       unique_id: rolladen_kinderzimmer_sued
-      position: "{{ 100 - (states('sensor.rolladen_kinderzimmer_sued_position') | float(0) | round(0) | int) }}"
+      position: "{{ 100 - (states('sensor.rolladen_kinderzimmer_sud_position') | float(0) | round(0) | int) }}"
       open_cover:
         - action: rest_command.comexio_set_marker
           data:
@@ -25,4 +25,31 @@
         - action: rest_command.comexio_set_marker
           data:
             marker: M60
+            value: "{{ 100 - position }}"
+    # Rolladen Kinderzimmer West — gesteuert über Merker (AWL: rolladen_kinderzimmer_west.awl)
+    # M71 = API Befehl (1=Hoch, 2=Runter, 5=Stop)
+    # M72 = Ziel Position (-1=deaktiviert, 0-100)
+    - name: "Rolladen Kinderzimmer West"
+      device_class: shutter
+      unique_id: rolladen_kinderzimmer_west
+      position: "{{ 100 - (states('sensor.rolladen_kinderzimmer_west_position_2') | float(0) | round(0) | int) }}"
+      open_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M71
+            value: 1
+      close_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M71
+            value: 2
+      stop_cover:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M71
+            value: 5
+      set_cover_position:
+        - action: rest_command.comexio_set_marker
+          data:
+            marker: M72
             value: "{{ 100 - position }}"

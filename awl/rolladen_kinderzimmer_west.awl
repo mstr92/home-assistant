@@ -1,0 +1,98 @@
+
+--M70	Istposition Rolladen (0–100)
+--M71	API Befehl (1=Hoch, 2=Runter, 5=Stop)
+--M72	Ziel Position (-1 = deaktiviert)
+--M73	Zustand (State Machine)
+--M74	Watchdog Zähler
+--M75	Flankenspeicher
+
+-- =========================================
+-- ROLLADEN STEUERUNG
+-- Kinderzimmer West — M70–M75 / IO-Server Q8-Q9
+-- =========================================
+
+local ROLLADEN_STEP = 0.96  -- Anpassen: 100 / Laufzeit_in_Sekunden
+local TOL = 0.2
+
+-- Flankenerkennung
+if T5 == 1 and M75 == 0 then
+
+  -- Sicherheitsabschaltung
+  IO-Server#Q8 = 0
+  IO-Server#Q9 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M71 == 5 then
+      M73 = 0
+      M71 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M71 == 1 then
+    M73 = 1
+    M71 = 0
+  end
+  if M71 == 2 then
+    M73 = 2
+    M71 = 0
+  end
+
+  -- =====================================
+  -- ZIELPOSITION
+  -- =====================================
+  if M72 >= 0 then
+      if math.abs(M72 - M70) < TOL then
+          M72 = -1
+          M73 = 0
+      else
+          M73 = (M72 > M70) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M73 == 1 then
+      IO-Server#Q8 = 1
+      M70 = M70 - ROLLADEN_STEP
+
+  elseif M73 == 2 then
+      IO-Server#Q9 = 1
+      M70 = math.min(M70 + ROLLADEN_STEP, 100)
+
+  elseif M73 == 9 then
+      -- Referenzfahrt oben
+      IO-Server#Q8 = 1
+      M70 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M73 ~= 0 then
+      M74 = M74 + 1
+      if M74 > 500 then
+          M73 = 0
+          M74 = 0
+      end
+  else
+      M74 = 0
+  end
+
+  -- Stop wenn ganz oben oder ganz unten
+	if (M70 >= 100) then
+   	M73 = 0
+	end
+
+	-- oben NICHT sofort stoppen → Überfahrt erlauben
+	if (M70 <= -10) then   -- ca. 10% "Überfahrt"
+   		M73 = 0
+   		M70 = 0
+	end
+end
+
+M75 = T5

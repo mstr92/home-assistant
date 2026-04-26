@@ -1,0 +1,98 @@
+
+--M64	Istposition Rolladen (0–100)
+--M65	API Befehl (1=Hoch, 2=Runter, 5=Stop)
+--M66	Ziel Position (-1 = deaktiviert)
+--M67	Zustand (State Machine)
+--M68	Watchdog Zähler
+--M69	Flankenspeicher
+
+-- =========================================
+-- ROLLADEN STEUERUNG
+-- Schlafzimmer — M64–M69 / UniversalAktor Q13-Q14
+-- =========================================
+
+local ROLLADEN_STEP = 0.96  -- Anpassen: 100 / Laufzeit_in_Sekunden
+local TOL = 0.2
+
+-- Flankenerkennung
+if T5 == 1 and M69 == 0 then
+
+  -- Sicherheitsabschaltung
+  UniversalAktor#Q13 = 0
+  UniversalAktor#Q14 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M65 == 5 then
+      M67 = 0
+      M65 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M65 == 1 then
+    M67 = 1
+    M65 = 0
+  end
+  if M65 == 2 then
+    M67 = 2
+    M65 = 0
+  end
+
+  -- =====================================
+  -- ZIELPOSITION
+  -- =====================================
+  if M66 >= 0 then
+      if math.abs(M66 - M64) < TOL then
+          M66 = -1
+          M67 = 0
+      else
+          M67 = (M66 > M64) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M67 == 1 then
+      UniversalAktor#Q13 = 1
+      M64 = M64 - ROLLADEN_STEP
+
+  elseif M67 == 2 then
+      UniversalAktor#Q14 = 1
+      M64 = math.min(M64 + ROLLADEN_STEP, 100)
+
+  elseif M67 == 9 then
+      -- Referenzfahrt oben
+      UniversalAktor#Q13 = 1
+      M64 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M67 ~= 0 then
+      M68 = M68 + 1
+      if M68 > 500 then
+          M67 = 0
+          M68 = 0
+      end
+  else
+      M68 = 0
+  end
+
+  -- Stop wenn ganz oben oder ganz unten
+	if (M64 >= 100) then
+   	M67 = 0
+	end
+
+	-- oben NICHT sofort stoppen → Überfahrt erlauben
+	if (M64 <= -10) then   -- ca. 10% "Überfahrt"
+   		M67 = 0
+   		M64 = 0
+	end
+end
+
+M69 = T5

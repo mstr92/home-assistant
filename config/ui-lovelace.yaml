@@ -115,3 +115,4 @@ views:
             name: Behang Position Süd (M22)
           - entity: sensor.raffstore_sued_lamelle
             name: Lamellen Position Süd (M23)
+  

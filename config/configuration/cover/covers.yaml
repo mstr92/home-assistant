@@ -14,3 +14,11 @@
     - cover.raffstore_essbereich
     - cover.raffstore_kuche_ost
     - cover.raffstore_kuche_sud
+
+- platform: group
+  name: "DG Rolle Zentral"
+  unique_id: dg_rolle_zentral_gruppe
+  entities:
+    - cover.rolladen_kinderzimmer_west
+    - cover.rolladen_kinderzimmer_sud_2
+    - cover.rolladen_schlafzimmer

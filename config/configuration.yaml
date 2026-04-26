@@ -10,19 +10,6 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
-lovelace:
-  dashboards:
-    lovelace:
-      mode: yaml
-      filename: ui-lovelace.yaml
-      title: Overview
-      icon: mdi:view-dashboard
-      show_in_sidebar: true
-
-input_button:
-  licht_an:
-    name: Licht An
-
 rest: !include configuration/rest/rest.yaml
 
 rest_command: !include configuration/rest/rest_commands.yaml
@@ -32,3 +19,80 @@ template: !include_dir_merge_list configuration/template/
 light: !include configuration/lights/lights.yaml
 
 cover: !include configuration/cover/covers.yaml
+
+
+modbus1:
+  - name: huawei
+    type: tcp
+    host: 192.168.100.26
+    port: 502
+    sensors:
+      # --- Momentanwerte ---
+      - name: PV Power
+        slave: 1
+        address: 32064
+        data_type: int32
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+
+      - name: Battery SOC
+        slave: 1
+        address: 37760
+        data_type: uint16
+        scale: 0.1
+        precision: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+
+      # --- Energiezähler für Energy-Dashboard ---
+      - name: PV Energy Total
+        slave: 1
+        address: 32106
+        data_type: uint32
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: Battery Charge Total
+        slave: 1
+        address: 37780
+        data_type: uint32
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: Battery Discharge Total
+        slave: 1
+        address: 37786
+        data_type: uint32
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: Grid Export Total
+        slave: 1
+        address: 37119
+        data_type: uint32
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: Grid Import Total
+        slave: 1
+        address: 37121
+        data_type: uint32
+        scale: 0.01
+        precision: 2
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing

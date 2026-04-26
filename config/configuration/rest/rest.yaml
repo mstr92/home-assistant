@@ -186,3 +186,33 @@
       unique_id: rolladen_kinderzimmer_sued_position_m58
       value_template: "{{ value.split(':')[0] | int(0) }}"
       unit_of_measurement: "%"
+# M64 = Istposition Rolladen Schlafzimmer (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M64"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Rolladen Schlafzimmer Position"
+      unique_id: rolladen_schlafzimmer_position_m64
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M70 = Istposition Rolladen Kinderzimmer West (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M70"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Rolladen Kinderzimmer West Position"
+      unique_id: rolladen_kinderzimmer_west_position_m70
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"
+# M76 = Istposition Rolladen Büro (0–100), aktualisiert vom AWL-Script
+- resource: "http://192.168.1.127/api/?action=get&marker=M76"
+  username: !secret comexio_user
+  password: !secret comexio_password
+  scan_interval: 1
+  sensor:
+    - name: "Rolladen Büro Position"
+      unique_id: rolladen_buero_position_m76
+      value_template: "{{ value.split(':')[0] | int(0) }}"
+      unit_of_measurement: "%"

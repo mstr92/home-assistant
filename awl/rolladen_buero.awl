@@ -1,0 +1,98 @@
+
+--M76	Istposition Rolladen (0–100)
+--M77	API Befehl (1=Hoch, 2=Runter, 5=Stop)
+--M78	Ziel Position (-1 = deaktiviert)
+--M79	Zustand (State Machine)
+--M80	Watchdog Zähler
+--M81	Flankenspeicher
+
+-- =========================================
+-- ROLLADEN STEUERUNG
+-- Büro — M76–M81 / UniversalAktor Q11-Q12
+-- =========================================
+
+local ROLLADEN_STEP = 0.96  -- Anpassen: 100 / Laufzeit_in_Sekunden
+local TOL = 0.2
+
+-- Flankenerkennung
+if T5 == 1 and M81 == 0 then
+
+  -- Sicherheitsabschaltung
+  UniversalAktor#Q11 = 0
+  UniversalAktor#Q12 = 0
+
+  -- =====================================
+  -- STOP
+  -- =====================================
+  if M77 == 5 then
+      M79 = 0
+      M77 = 0
+  end
+
+  -- =====================================
+  -- API DIREKTBEFEHL
+  -- =====================================
+  if M77 == 1 then
+    M79 = 1
+    M77 = 0
+  end
+  if M77 == 2 then
+    M79 = 2
+    M77 = 0
+  end
+
+  -- =====================================
+  -- ZIELPOSITION
+  -- =====================================
+  if M78 >= 0 then
+      if math.abs(M78 - M76) < TOL then
+          M78 = -1
+          M79 = 0
+      else
+          M79 = (M78 > M76) and 2 or 1
+      end
+  end
+
+  -- =====================================
+  -- ZUSTANDSMASCHINE
+  -- =====================================
+  if M79 == 1 then
+      UniversalAktor#Q11 = 1
+      M76 = M76 - ROLLADEN_STEP
+
+  elseif M79 == 2 then
+      UniversalAktor#Q12 = 1
+      M76 = math.min(M76 + ROLLADEN_STEP, 100)
+
+  elseif M79 == 9 then
+      -- Referenzfahrt oben
+      UniversalAktor#Q11 = 1
+      M76 = 0
+  end
+
+  -- =====================================
+  -- WATCHDOG (Motor Schutz)
+  -- =====================================
+  if M79 ~= 0 then
+      M80 = M80 + 1
+      if M80 > 500 then
+          M79 = 0
+          M80 = 0
+      end
+  else
+      M80 = 0
+  end
+
+  -- Stop wenn ganz unten
+	if (M76 >= 100) then
+   	M79 = 0
+	end
+
+	-- oben NICHT sofort stoppen → Überfahrt erlauben
+	if (M76 <= -10) then   -- ca. 10% "Überfahrt"
+   		M79 = 0
+   		M76 = 0
+	end
+end
+
+M81 = T5
