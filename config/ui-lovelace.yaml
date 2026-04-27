@@ -115,4 +115,18 @@ views:
             name: Behang Position Süd (M22)
           - entity: sensor.raffstore_sued_lamelle
             name: Lamellen Position Süd (M23)
+      - type: tile
+        entity: cover.dg_rolle_zentral
+        name: DG Rollos
+        icon: mdi:window-shutter
+        features:
+          - type: cover-open-close
+          - type: cover-position
+      - type: entities
+        title: DG Rollos Automatik
+        entities:
+          - entity: automation.dg_rollos_sonnenuntergang
+            name: Automatik aktiv
+          - entity: sensor.dg_rollos_schliesszeit
+            name: Schließzeit heute
   

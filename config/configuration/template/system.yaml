@@ -1,0 +1,6 @@
+- sensor:
+    - name: "DG Rollos Schließzeit"
+      unique_id: dg_rollos_schliesszeit
+      icon: mdi:clock-sunset
+      state: >
+        {{ (as_timestamp(state_attr('sun.sun', 'next_setting')) + 3600) | timestamp_custom('%H:%M', true) }}

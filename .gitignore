@@ -1,2 +1,8 @@
 *.log
-config/.storage/auth
+*.log.*
+*.db
+*.db-shm
+*.db-wal
+*.lock
+config/.storage/
+config/backups/

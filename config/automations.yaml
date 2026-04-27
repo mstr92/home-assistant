@@ -1,1 +1,21 @@
-[]
+- id: dg_rollos_sonnenuntergang
+  alias: "DG Rollos - 1 Stunde nach Sonnenuntergang schließen"
+  description: "Fährt alle DG Rollos 1 Stunde nach Sonnenuntergang herunter"
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "01:00:00"
+  condition: []
+  action:
+    - action: cover.close_cover
+      target:
+        entity_id:
+          - cover.rolladen_kinderzimmer_sud_2
+          - cover.rolladen_kinderzimmer_west
+    - action: cover.set_cover_position
+      target:
+        entity_id: cover.rolladen_schlafzimmer
+      data:
+        position: 25
+  mode: single
+
